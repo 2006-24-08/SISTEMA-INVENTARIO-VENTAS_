@@ -1,0 +1,4 @@
+[2026-10-10 20:07:16] Venta: 3x Coca-Cola 2.5L - Q60.00
+[2026-10-10 20:07:25] Venta: 1x Leche Entera 1L - Q12.50
+[2026-10-10 20:07:33] Venta: 3x Sal - Q12.00
+[2026-10-10 20:08:04] Inventario guardado. Programa cerrado.
