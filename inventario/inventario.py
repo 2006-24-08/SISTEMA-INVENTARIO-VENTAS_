@@ -6,37 +6,50 @@
 
 from .modelos import Producto
 
+from .excepciones import (
+    ProductoDuplicadoError,
+    ProductoNoEncontradoError
+)
+
 
 # ==========================================
 # 3. CLASE INVENTARIO
-# TEMA: COMPOSICION Y COLECCIONES
+# TEMA: PROGRAMACION ORIENTADA A OBJETOS
 # DIAGRAMA UML: CLASE INVENTARIO
 # ==========================================
 
 class Inventario:
     """Administra los productos del inventario."""
 
-    # TEMA: CONSTRUCTOR
+    # ======================================
+    # TEMA: CONSTRUCTOR Y ENCAPSULAMIENTO
+    # ======================================
+
     def __init__(self):
-        # Diccionario para guardar productos
+        # Diccionario para almacenar productos
         self._productos = {}
 
     # ======================================
     # TEMA: AGREGAR PRODUCTO
-    # DIAGRAMA UML: METODO AGREGAR
+    # TEMA: EXCEPCIONES PERSONALIZADAS
     # ======================================
 
     def agregar(self, producto):
         """Agrega un producto al inventario."""
 
+        if not isinstance(producto, Producto):
+            raise TypeError("Debe ingresar un producto valido.")
+
         if producto.codigo in self._productos:
-            raise ValueError("El codigo ya existe.")
+            raise ProductoDuplicadoError(
+                "El codigo ya existe."
+            )
 
         self._productos[producto.codigo] = producto
 
     # ======================================
     # TEMA: BUSCAR PRODUCTO
-    # DIAGRAMA UML: METODO BUSCAR
+    # TEMA: LISTAS Y COLECCIONES
     # ======================================
 
     def buscar(self, texto):
@@ -56,7 +69,7 @@ class Inventario:
 
     # ======================================
     # TEMA: OBTENER PRODUCTO POR CODIGO
-    # DIAGRAMA UML: METODO OBTENER
+    # TEMA: EXCEPCIONES PERSONALIZADAS
     # ======================================
 
     def obtener(self, codigo):
@@ -65,13 +78,15 @@ class Inventario:
         codigo = codigo.strip().upper()
 
         if codigo not in self._productos:
-            raise ValueError("Producto no encontrado.")
+            raise ProductoNoEncontradoError(
+                "Producto no encontrado."
+            )
 
         return self._productos[codigo]
 
     # ======================================
     # TEMA: ORDENAR INVENTARIO
-    # DIAGRAMA UML: METODO ORDENAR
+    # TEMA: COLECCIONES Y LAMBDA
     # ======================================
 
     def ordenar(self, criterio):
@@ -80,26 +95,33 @@ class Inventario:
         productos = list(self._productos.values())
 
         if criterio == "nombre":
-            return sorted(productos, key=lambda p: p.nombre)
+            return sorted(
+                productos,
+                key=lambda p: p.nombre.lower()
+            )
 
         if criterio == "precio":
-            return sorted(productos, key=lambda p: p.precio)
+            return sorted(
+                productos,
+                key=lambda p: p.precio
+            )
 
         raise ValueError("Criterio no valido.")
 
     # ======================================
     # TEMA: SET DE CATEGORIAS
-    # DIAGRAMA UML: METODO CATEGORIAS
     # ======================================
 
     def categorias(self):
-        """Devuelve categorias sin repetir."""
+        """Devuelve las categorias sin repetir."""
 
-        return {p.categoria for p in self._productos.values()}
+        return {
+            producto.categoria
+            for producto in self._productos.values()
+        }
 
     # ======================================
     # TEMA: METODOS ESPECIALES
-    # DIAGRAMA UML: CLASE INVENTARIO
     # ======================================
 
     def __len__(self):
@@ -108,7 +130,7 @@ class Inventario:
 
     def __contains__(self, codigo):
         """Comprueba si existe un codigo."""
-        return codigo in self._productos
+        return codigo.strip().upper() in self._productos
 
     def __iter__(self):
         """Permite recorrer los productos."""
