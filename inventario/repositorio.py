@@ -41,8 +41,12 @@ class RepositorioCSV:
         if not self._archivo.exists():
             return inventario
 
-        with open(self._archivo, "r",
-                  encoding="utf-8-sig", newline="") as archivo:
+        with open(
+            self._archivo,
+            "r",
+            encoding="utf-8-sig",
+            newline=""
+        ) as archivo:
 
             lector = csv.reader(archivo)
 
@@ -58,7 +62,7 @@ class RepositorioCSV:
 
                 codigo, nombre, precio, stock, categoria = fila
 
-                # Omitir encabezados si existen
+                # Omitir el encabezado si existe
                 if codigo.strip().lower() == "codigo":
                     continue
 
@@ -80,13 +84,27 @@ class RepositorioCSV:
     # ======================================
 
     def guardar(self, inventario):
-        """Guarda los productos en el archivo CSV."""
+        """Guarda los productos y su encabezado en CSV."""
 
-        with open(self._archivo, "w",
-                  encoding="utf-8", newline="") as archivo:
+        with open(
+            self._archivo,
+            "w",
+            encoding="utf-8-sig",
+            newline=""
+        ) as archivo:
 
             escritor = csv.writer(archivo)
 
+            # Escribir los nombres de las columnas
+            escritor.writerow([
+                "codigo",
+                "nombre",
+                "precio",
+                "stock",
+                "categoria"
+            ])
+
+            # Guardar todos los productos
             for producto in inventario:
 
                 escritor.writerow([
