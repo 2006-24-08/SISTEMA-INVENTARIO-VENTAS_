@@ -1,6 +1,7 @@
 
 # ==========================================
-# PROYECTO FINAL - SISTEMA DE INVENTARIO
+# PROYECTO FINAL
+# SISTEMA DE INVENTARIO Y VENTAS CON POO
 # ARCHIVO: main_poo.py
 # ==========================================
 
@@ -17,21 +18,22 @@ from inventario.excepciones import (
 
 # ==========================================
 # TEMA: PROGRAMACION ORIENTADA A OBJETOS
-# TEMA: INTEGRACION DE CLASES
+# INTEGRACION DE CLASES
 # ==========================================
 
 def mostrar_productos(productos, regla):
-    """Muestra los productos y sus alertas."""
 
     if not productos:
         print("No hay productos para mostrar.")
         return
 
     for producto in productos:
+
         alerta = regla.aplicar(producto)
 
         print(
-            f"{producto.codigo} | {producto.nombre} | "
+            f"{producto.codigo} | "
+            f"{producto.nombre} | "
             f"Q{producto.precio:.2f} | "
             f"Stock: {producto.stock} | "
             f"{producto.categoria} {alerta}"
@@ -39,7 +41,7 @@ def mostrar_productos(productos, regla):
 
 
 # ==========================================
-# TEMA: MENU PRINCIPAL
+# MENU PRINCIPAL
 # ==========================================
 
 def main():
@@ -48,11 +50,12 @@ def main():
 
     try:
         inventario = repositorio.cargar()
+
     except (ValueError, OSError) as error:
-        print("No se pudo cargar el inventario:", error)
+        print("Error al cargar inventario:", error)
         return
 
-    gestor = GestorVentas(inventario)
+    gestor = GestorVentas(inventario, "bitacora.txt")
     regla = AlertaStock(3)
 
     while True:
@@ -80,6 +83,7 @@ def main():
                 ).strip().lower()
 
                 productos = inventario.ordenar(criterio)
+
                 mostrar_productos(productos, regla)
 
             # ==================================
@@ -93,6 +97,7 @@ def main():
                 )
 
                 encontrados = inventario.buscar(texto)
+
                 mostrar_productos(encontrados, regla)
 
             # ==================================
@@ -116,6 +121,7 @@ def main():
                 )
 
                 inventario.agregar(producto)
+
                 print("Producto agregado correctamente.")
 
             # ==================================
@@ -135,6 +141,7 @@ def main():
                 print("Venta registrada:", venta)
 
                 producto = inventario.obtener(codigo)
+
                 alerta = regla.aplicar(producto)
 
                 if alerta:
@@ -161,13 +168,19 @@ def main():
 
             # ==================================
             # OPCION 6: GUARDAR Y SALIR
+            # TEMA: PERSISTENCIA DE DATOS
             # ==================================
 
             elif opcion == "6":
 
                 repositorio.guardar(inventario)
+
+                gestor.guardar_historial()
+
                 print("Inventario guardado correctamente.")
+                print("Historial de ventas guardado.")
                 print("Gracias por utilizar el sistema.")
+
                 break
 
             else:

@@ -1,46 +1,36 @@
 
 # ==========================================
-# PROYECTO FINAL - SISTEMA DE INVENTARIO
-# ARCHIVO: ventas.py
+# SISTEMA DE INVENTARIO Y VENTAS
+# ARCHIVO: inventario/ventas.py
 # ==========================================
 
 from datetime import datetime
+from pathlib import Path
 
 from .modelos import Venta
 from .excepciones import StockInsuficienteError
 
 
 # ==========================================
-# 7. CLASE GESTORVENTAS
-# TEMA: PROGRAMACION ORIENTADA A OBJETOS
-# DIAGRAMA UML: CLASE GESTORVENTAS
+# CLASE: GESTORVENTAS
+# POO: ENCAPSULAMIENTO Y COMPOSICION
+# PERSISTENCIA: ARCHIVOS DE TEXTO
 # ==========================================
 
 class GestorVentas:
-    """Administra las ventas del sistema."""
 
-    # ======================================
-    # TEMA: CONSTRUCTOR Y ENCAPSULAMIENTO
-    # ======================================
-
-    def __init__(self, inventario):
+    def __init__(self, inventario, archivo="bitacora.txt"):
         self._inventario = inventario
         self._ventas = []
+        self._archivo = Path(archivo)
 
-    # ======================================
-    # TEMA: REGISTRAR VENTA
-    # TEMA: EXCEPCIONES PERSONALIZADAS
-    # ======================================
-
+    # REGISTRAR VENTA
     def registrar_venta(self, codigo, cantidad):
-        """Registra una venta y descuenta el stock."""
 
         producto = self._inventario.obtener(codigo)
 
         if not isinstance(cantidad, int) or cantidad <= 0:
-            raise ValueError(
-                "La cantidad debe ser un numero entero positivo."
-            )
+            raise ValueError("La cantidad debe ser positiva.")
 
         if cantidad > producto.stock:
             raise StockInsuficienteError(
@@ -62,29 +52,35 @@ class GestorVentas:
         )
 
         self._ventas.append(venta)
-
         return venta
 
-    # ======================================
-    # TEMA: REPORTE DE VENTAS
-    # ======================================
+    # GUARDAR HISTORIAL EN ARCHIVO TXT
+    def guardar_historial(self):
 
+        if not self._ventas:
+            return
+
+        with open(self._archivo, "a", encoding="utf-8") as archivo:
+
+            for venta in self._ventas:
+                archivo.write(
+                    f"{venta.fecha} | "
+                    f"{venta.codigo} | "
+                    f"{venta.nombre} | "
+                    f"Cantidad: {venta.cantidad} | "
+                    f"Total: Q{venta.total:.2f}\n"
+                )
+
+        self._ventas.clear()
+
+    # REPORTE DE VENTAS
     def reporte_ventas(self):
-        """Devuelve las ventas registradas."""
         return self._ventas.copy()
 
-    # ======================================
-    # TEMA: CALCULAR TOTAL DE VENTAS
-    # ======================================
-
+    # TOTAL VENDIDO
     def total_ventas(self):
-        """Calcula el dinero de las ventas."""
         return sum(venta.total for venta in self._ventas)
 
-    # ======================================
-    # TEMA: METODO ESPECIAL
-    # ======================================
-
+    # METODO ESPECIAL
     def __len__(self):
-        """Devuelve la cantidad de ventas."""
         return len(self._ventas)
