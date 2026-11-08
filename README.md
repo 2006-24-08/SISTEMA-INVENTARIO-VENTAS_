@@ -1,5 +1,5 @@
 # Sistema de Inventario y Ventas con Programación Orientada a Objetos
-##Programación Orientada a Objetos
+Programación Orientada a Objetos
 
 Estudiante: Alessandra Pamela Contreras Ramírez
 
