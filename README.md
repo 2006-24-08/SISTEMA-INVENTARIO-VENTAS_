@@ -1,4 +1,9 @@
 # Sistema de Inventario y Ventas con Programación Orientada a Objetos
+##Programación Orientada a Objetos
+
+Estudiante: Alessandra Pamela Contreras Ramírez
+
+Carné: 7691-26-19524
 
 ## Descripción del proyecto
 
