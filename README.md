@@ -1,6 +1,12 @@
 # Sistema de Inventario y Ventas con Programación Orientada a Objetos
 Programación Orientada a Objetos
 
+Universidad Mariano Gálvez de Guatemala
+Campus de Boca del Monte
+
+Facultad de Ingeniería en Sistemas
+Curso: Algoritmos
+
 Estudiante: Alessandra Pamela Contreras Ramírez
 
 Carné: 7691-26-19524
