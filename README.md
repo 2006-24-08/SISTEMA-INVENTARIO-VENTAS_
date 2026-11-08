@@ -15,6 +15,10 @@ El sistema permite administrar productos, consultar existencias, registrar venta
 
 Desarrollar un sistema de inventario y ventas aplicando los conceptos fundamentales de la Programación Orientada a Objetos, con el propósito de organizar el código y facilitar su mantenimiento.
 
+## Regla especial
+
+Como regla especial, decidí implementar una alerta de stock bajo, que permite identificar cuando las existencias de un producto llegan a un límite establecido. Para ello, utilicé las clases ReglaNegocio, SinAlerta y AlertaStock, aplicando los conceptos de herencia y polimorfismo.
+
 ## Funcionalidades principales
 
 - Visualizar los productos registrados.
